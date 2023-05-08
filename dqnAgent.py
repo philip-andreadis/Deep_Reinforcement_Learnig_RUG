@@ -18,11 +18,11 @@ class DQNagent():
         self.memory = deque(maxlen=2000)
 
         # Initialize discount factor
-        self.gamma = 0.9
+        self.gamma = 0.95
 
         # Initialize exploration rate, decay and floor
         self.epsilon = 1
-        self.e_decay = 0.999
+        self.e_decay = 0.9999
         self.e_floor = 0.05
 
         # Initialize learning rate
@@ -31,6 +31,10 @@ class DQNagent():
         # Build model and target model
         self.model = self._build_model()
         self.target_model = self._build_model()
+
+        # Save settings
+        self.save_dir = 'models'
+        self.model_name = os.path.join(self.save_dir, "Catch_DQN_CNN_simple")
 
     def _build_model(self):
         '''
@@ -108,9 +112,9 @@ class DQNagent():
         # Randomly sample minibatch from the deque memory
         minibatch = random.sample(self.memory, min(len(self.memory), batch_size))
 
-        print('MINIBATCH LEN ', len(minibatch))
-        print('STATE IN MINIBATCH SHAPE ', minibatch[0][0].shape)
-        print('NEXT_STATE IN MINIBATCH SHAPE ', minibatch[0][3].shape)
+        # print('MINIBATCH LEN ', len(minibatch))
+        # print('STATE IN MINIBATCH SHAPE ', minibatch[0][0].shape)
+        # print('NEXT_STATE IN MINIBATCH SHAPE ', minibatch[0][3].shape)
 
         # Initializations
         state = np.zeros((batch_size,) + self.state_shape)
@@ -182,7 +186,14 @@ class DQNagent():
         return
 
     def load(self, name):
+        '''
+            Loads the trained model in name and returns it.
+        '''
         self.model = load_model(name)
+        return self.model
 
     def save(self, name):
+        '''
+            Saves trained model in name.
+        '''
         self.model.save(name)
