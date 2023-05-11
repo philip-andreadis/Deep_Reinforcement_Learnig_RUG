@@ -65,7 +65,7 @@ class DQNagent():
         # Compile model
         model = Model(inputs=X_input, outputs=X, name='Catch_DQN_CNN_basic')
         #TODO: should we use differenet optimizer? like ADAM?
-        model.compile(loss="mean_squared_error", optimizer=RMSprop(learling_rate=0.001, rho=0.95, epsilon=0.01), metrics=["accuracy"])
+        model.compile(loss="mean_squared_error", optimizer=RMSprop(learning_rate=0.001, rho=0.95, epsilon=0.01), metrics=["accuracy"])
 
         return model
 
