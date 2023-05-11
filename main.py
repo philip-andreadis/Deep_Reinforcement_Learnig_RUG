@@ -35,7 +35,8 @@ if __name__ == "__main__":
 
     for episode in range(num_episodes):
         env.reset()
-
+        terminal = False
+        #TODO: Is it okay to go left everytime we start the game? Maybe a random action would be better?
         state, reward, terminal = env.step(1)
         print('\n---------------------------------')
         print('EPISODE', episode)
