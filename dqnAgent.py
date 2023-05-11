@@ -44,6 +44,7 @@ class DQNagent():
                 model (keras model): The compiled CNN model
         '''
         # Define input image shape
+        print('\nSTATE SHAPE:',self.state_shape)
         X_input = Input(self.state_shape)
         X = X_input
 
@@ -52,7 +53,7 @@ class DQNagent():
         X = Conv2D(64, 4, strides=(2, 2), padding="valid", activation="relu", data_format="channels_first")(X)
         X = Conv2D(64, 3, strides=(1, 1), padding="valid", activation="relu", data_format="channels_first")(X)
         X = Flatten()(X)
-
+        print('\nFLATTEN SHAPE:',X.shape)
         # Input Layer of state size(4) and Hidden Layer with 512 nodes
         X = Dense(512, activation="relu", kernel_initializer='he_uniform')(X)
 
@@ -67,7 +68,7 @@ class DQNagent():
 
         # Compile model
         model = Model(inputs=X_input, outputs=X, name='Catch_DQN_CNN_basic')
-        model.compile(loss="mean_squared_error", optimizer=RMSprop(lr=0.00025, rho=0.95, epsilon=0.01), metrics=["accuracy"])
+        model.compile(loss="mean_squared_error", optimizer=RMSprop(learling_rate=0.00025, rho=0.95, epsilon=0.01), metrics=["accuracy"])
         # Ouput model architecture
         # model.summary()
 

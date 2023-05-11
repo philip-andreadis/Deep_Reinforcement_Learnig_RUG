@@ -3,7 +3,7 @@ import random
 import numpy as np
 import cv2
 from dqnAgent import DQNagent
-from google.colab.patches import cv2_imshow
+#from google.colab.patches import cv2_imshow
 import os
 import pickle
 
@@ -84,6 +84,7 @@ if __name__ == "__main__":
             # end of episode
             if terminal:
                 # every update_step update target model
+                # TODO check if the number of updates should be this small.
                 if episode % update_step == 0:
                     agent.update_target_model()
 
