@@ -48,19 +48,13 @@ class DQNagent():
         X = X_input
 
         # Convolutional layers
-        #X = Conv2D(64, 4, strides=(2, 2), padding="valid", activation="relu", data_format="channels_first")(X)
-        X = Conv2D(8, 5, strides=(3, 3), padding="valid", input_shape=self.state_shape, activation="relu",data_format="channels_first")(X)
-        X = Conv2D(5, 2, strides=(3, 3), padding="valid", input_shape=self.state_shape, activation="relu",data_format="channels_first")(X)        
-        #X = Conv2D(64, 4, strides=(2, 2), padding="valid", activation="relu", data_format="channels_first")(X)
-        #X = Conv2D(64, 3, strides=(1, 1), padding="valid", activation="relu", data_format="channels_first")(X)
+        
+        X = Conv2D(16, 5, strides=(5, 5), padding="valid", input_shape=self.state_shape, activation="relu",data_format="channels_first")(X)
+        X = Conv2D(32, 5, strides=(2, 2), padding="valid", input_shape=self.state_shape, activation="relu",data_format="channels_first")(X)        
         X = Flatten()(X)
-        print('\nFLATTEN SHAPE:',X.shape)
-        # Input Layer of state size(4) and Hidden Layer with 512 nodes
-        # X = Dense(512, activation="relu", kernel_initializer='he_uniform')(X)
+        
+        # Input Layer of state size(4) and Hidden Layer with 128 nodes
         X = Dense(128, activation="relu", kernel_initializer='he_uniform')(X)
-
-        # Hidden layer with 256 nodes
-        #X = Dense(256, activation="relu", kernel_initializer='he_uniform')(X)
 
         # Hidden layer with 64 nodes
         X = Dense(64, activation="relu", kernel_initializer='he_uniform')(X)
@@ -72,8 +66,6 @@ class DQNagent():
         model = Model(inputs=X_input, outputs=X, name='Catch_DQN_CNN_basic')
         #TODO: should we use differenet optimizer? like ADAM?
         model.compile(loss="mean_squared_error", optimizer=RMSprop(learling_rate=0.001, rho=0.95, epsilon=0.01), metrics=["accuracy"])
-        # Ouput model architecture
-        # model.summary()
 
         return model
 
