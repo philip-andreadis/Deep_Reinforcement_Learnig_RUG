@@ -26,7 +26,7 @@ if __name__ == "__main__":
     render = False
     update_step = 4
     save_dir = 'models'
-    model_name = 'Catch_DQN_CNN_simple_2000'
+    model_name = 'Catch_DQN_CNN_simple_2000.h5'
     path = os.path.join(save_dir, model_name)
     final_rewards = []
 
