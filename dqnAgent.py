@@ -48,7 +48,9 @@ class DQNagent():
         X = X_input
 
         # Convolutional layers
+        #X = Conv2D(64, 4, strides=(2, 2), padding="valid", activation="relu", data_format="channels_first")(X)
         X = Conv2D(8, 5, strides=(3, 3), padding="valid", input_shape=self.state_shape, activation="relu",data_format="channels_first")(X)
+        X = Conv2D(5, 2, strides=(3, 3), padding="valid", input_shape=self.state_shape, activation="relu",data_format="channels_first")(X)        
         #X = Conv2D(64, 4, strides=(2, 2), padding="valid", activation="relu", data_format="channels_first")(X)
         #X = Conv2D(64, 3, strides=(1, 1), padding="valid", activation="relu", data_format="channels_first")(X)
         X = Flatten()(X)
