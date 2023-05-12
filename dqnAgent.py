@@ -190,3 +190,9 @@ class DQNagent():
             Saves trained model in name.
         '''
         self.model.save(name)
+
+    def get_model(self):
+        '''
+            Returns the model.
+        '''
+        return self.model

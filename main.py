@@ -6,6 +6,7 @@ from dqnAgent import DQNagent
 import os
 import pickle
 from matplotlib import pyplot as plt
+from testModel import test_model
 
 if __name__ == "__main__":
 
@@ -21,7 +22,7 @@ if __name__ == "__main__":
     print('\nState shape:', state_shape)
 
     # Parameters
-    num_episodes = 2000
+    num_episodes = 3000
     batch_size = 32
     render = True
     update_step = 4
@@ -29,11 +30,12 @@ if __name__ == "__main__":
     model_name = 'Catch_DQN_CNN_simple_{}.h5'.format(num_episodes)
     path = os.path.join(save_dir, model_name)
     final_rewards = []
+    average_rewards = []
 
     # Define agent
     agent = DQNagent(state_shape, num_actions)
 
-    for episode in range(num_episodes):
+    for episode in range(1, num_episodes+1):
         # Initialize state with random ball position
         state = env.reset()
         terminal = False
@@ -92,23 +94,32 @@ if __name__ == "__main__":
                 print("\nFINAL reward obtained by the agent: {}".format(reward))
                 final_rewards.append(reward)
 
-                # save model at the end of each episode
-                print('\nsaving model of episode {} in {}'.format(episode, path))
-                agent.save(path)
+                # Every 10 episodes enter testing mode
+                if episode % 10 == 0:
+                    # test
+                    average_rewards.append(test_model(agent.get_model()))
+
+                    # save model every 10 episodes
+                    print('\nsaving model of episode {} in {}'.format(episode, path))
+                    agent.save(path)
 
             agent.replay(batch_size)
 
         print("\nEnd of the episode")
 
     # save final rewards in pickle
-    with open('rewards.pkl', 'wb') as f:
+    with open('rewards_{}.pkl'.format(num_episodes), 'wb') as f:
         pickle.dump(final_rewards, f)
 
-    # plot moving average of final rewards
-    N = 10 # window size
-    rm = np.convolve(final_rewards, np.ones(N) / N, mode='valid')
-    plt.plot(rm)
-    plt.show()
+    # # plot moving average of final rewards
+    # N = 10 # window size
+    # rm = np.convolve(final_rewards, np.ones(N) / N, mode='valid')
+    # plt.plot(rm)
+    # plt.show()
+
+    # save average rewards as .npy file
+    print('avg shape', len(average_rewards))
+    np.save('avg_rewards_{}.npy'.format(num_episodes), average_rewards)
 
 
 
