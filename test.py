@@ -11,7 +11,7 @@ num_actions = env.get_num_actions()
 state_shape = env.state_shape()
 
 # params
-path = 'models/Catch_DQN_CNN_simple_2000'
+path = 'models/Catch_DQN_CNN_simple_2000.h5'
 episodes = 100
 
 # Define agent
