@@ -1,0 +1,8 @@
+Parameters to tune:
+-Learning rate
+-Target net update steps
+-Number of episodes
+-CNN architecture
+-Batch size
+-Epsilon decay factor
+-Episodes in test.py

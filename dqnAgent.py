@@ -108,10 +108,6 @@ class DQNagent():
         # Randomly sample minibatch from the deque memory
         minibatch = random.sample(self.memory, min(len(self.memory), batch_size))
 
-        # print('MINIBATCH LEN ', len(minibatch))
-        # print('STATE IN MINIBATCH SHAPE ', minibatch[0][0].shape)
-        # print('NEXT_STATE IN MINIBATCH SHAPE ', minibatch[0][3].shape)
-
         # Initializations
         state = np.zeros((batch_size,) + self.state_shape)
         next_state = np.zeros((batch_size,) + self.state_shape)
@@ -126,6 +122,7 @@ class DQNagent():
             # next_state[i] = np.transpose(minibatch[i][3],(2,0,1)) # minibatch state (84,84,4) -> (4,84,84)
             next_state[i] = minibatch[i][3]
             done.append(minibatch[i][4])
+
 
         # predict Q-values for starting state using the main network
         target = self.model.predict(state)

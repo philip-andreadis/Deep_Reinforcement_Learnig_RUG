@@ -3,9 +3,9 @@ import random
 import numpy as np
 import cv2
 from dqnAgent import DQNagent
-#from google.colab.patches import cv2_imshow
 import os
 import pickle
+from matplotlib import pyplot as plt
 
 if __name__ == "__main__":
 
@@ -23,10 +23,10 @@ if __name__ == "__main__":
     # Parameters
     num_episodes = 2000
     batch_size = 32
-    render = False
+    render = True
     update_step = 4
     save_dir = 'models'
-    model_name = 'Catch_DQN_CNN_simple_2000.h5'
+    model_name = 'Catch_DQN_CNN_simple_{}.h5'.format(num_episodes)
     path = os.path.join(save_dir, model_name)
     final_rewards = []
 
@@ -34,10 +34,12 @@ if __name__ == "__main__":
     agent = DQNagent(state_shape, num_actions)
 
     for episode in range(num_episodes):
-        env.reset()
+        # Initialize state with random ball position
+        state = env.reset()
         terminal = False
-        #TODO: Is it okay to go left everytime we start the game? Maybe a random action would be better?
-        state, reward, terminal = env.step(1)
+
+        # state, reward, terminal = env.step(1) # not needed
+
         print('\n---------------------------------')
         print('EPISODE', episode)
 
@@ -48,39 +50,36 @@ if __name__ == "__main__":
         # play one episode
         while not terminal:
 
-            # get the action from the agent
-            # print('\nSTATE SHAPE BEFORE ACT:',state.shape)
-            action = agent.act(state)
-            # make a step with the corresponding action
-            next_state, reward, terminal = env.step(action)
-            # print('\nNEXT STATE SHAPE AFTER STEP:',next_state.shape)
-
-            # next_state(84,84,4) -> (1,4,84,84)
-            next_state = np.transpose(next_state, (2, 0, 1))
-            next_state = np.expand_dims(next_state, axis=0)
-            # print('\nNEXT STATE SHAPE AFTER TRANSPOSE:',next_state.shape)
-
-            # add trajectory to the experience replay memory
-            agent.remember(state, action, reward, next_state, terminal)
-            # update state
-            state = next_state
-            # state = np.squeeze(next_state)
-            # print('\ STATE SHAPE AFTER SQUEEZE:',state.shape)
-
             # Render steps
             if render:
                 img = np.squeeze(state)
                 img = np.transpose(img, (1, 2, 0))
-                # ~~if want to render pass img to imshow..
-                # cv2.imshow('state', cv2.resize(state[:,:,0], (84*4,84*4)))
-                # cv2.waitKey(150)
-                img = np.squeeze(state)
-                img = np.transpose(img, (1, 2, 0))
-                # imshow(img)
-                # cv2_imshow(img)
+                # stacked
+                # cv2.imshow('state', cv2.resize(img[:, :, :], (84 * 4, 84 * 4)))
+                # individual frames
+                # cv2.imshow('state', cv2.resize(img[:,:,0], (84 * 4, 84 * 4)))
+                # cv2.imshow('state1', cv2.resize(img[:, :, 1], (84 * 4, 84 * 4)))
+                # cv2.imshow('state2', cv2.resize(img[:, :, 2], (84 * 4, 84 * 4)))
+                # cv2.imshow('state3', cv2.resize(img[:, :, 3], (84 * 4, 84 * 4)))
+                # cv2.waitKey()
+
+            # get the action from the agent
+            action = agent.act(state)
+
+            # make a step with the corresponding action
+            next_state, reward, terminal = env.step(action)
+
+            # next_state(84,84,4) -> (1,4,84,84)
+            next_state = np.transpose(next_state, (2, 0, 1))
+            next_state = np.expand_dims(next_state, axis=0)
+
+            # add trajectory to the experience replay memory
+            agent.remember(state, action, reward, next_state, terminal)
+
+            # update state
+            state = next_state
 
             print("\nReward obtained by the agent: {}".format(reward))
-            # state = np.squeeze(state)
 
             # end of episode
             if terminal:
@@ -104,5 +103,12 @@ if __name__ == "__main__":
     # save final rewards in pickle
     with open('rewards.pkl', 'wb') as f:
         pickle.dump(final_rewards, f)
+
+    # plot moving average of final rewards
+    N = 10 # window size
+    rm = np.convolve(final_rewards, np.ones(N) / N, mode='valid')
+    plt.plot(rm)
+    plt.show()
+
 
 

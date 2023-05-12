@@ -2,6 +2,10 @@ gym1.py
 original.jpg
 PER.py
 tutorial.py
+agent_cpu.py
+dummy.py
 .idea/
 __pycache__/
 SvVenv/
+models/
+rewards.pkl

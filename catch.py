@@ -2,6 +2,7 @@ from skimage.transform import resize
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+import cv2
 
 
 class CatchEnv():
@@ -49,12 +50,17 @@ class CatchEnv():
 
         self.image[-5].fill(0)
         self.image[-5, self.pos-2:self.pos+3] = np.ones(5)
+
+
     
         terminal = self.bally == self.size - 1 - 4
         reward = int(self.pos - 2 <= self.ballx <= self.pos + 2) if terminal else 0
 
         [self.state.append(resize(self.image, (84, 84))) for _ in range(self.fps - len(self.state) + 1)]
         self.state = self.state[-self.fps:]
+
+
+
 
         return np.transpose(self.state, [1, 2, 0]), reward, terminal
 
@@ -70,7 +76,7 @@ class CatchEnv():
 
 def run_environment():
     env = CatchEnv()
-    number_of_episodes = 1
+    number_of_episodes = 2
 
     for ep in range(number_of_episodes):
         env.reset()
@@ -78,11 +84,13 @@ def run_environment():
         state, reward, terminal = env.step(1)
 
         while not terminal:
+            print('state shape', state.shape)
+            cv2.imshow('state', cv2.resize(state[:, :], (84 * 4, 84 * 4)))
+            cv2.waitKey()
             state, reward, terminal = env.step(random.randint(0,2))
             print("Reward obtained by the agent: {}".format(reward))
             state = np.squeeze(state)
-            # plt.imshow(state)
-            # plt.show()
+
 
         print("End of the episode")
             
