@@ -18,7 +18,7 @@ class DQNagent():
         self.memory = deque(maxlen=2000)
 
         # Initialize discount factor
-        self.gamma = 0.95
+        self.gamma = 0.98
 
         # Initialize exploration rate, decay and floor
         self.epsilon = 1
@@ -50,7 +50,7 @@ class DQNagent():
         # Convolutional layers
         
         X = Conv2D(16, 5, strides=(5, 5), padding="valid", input_shape=self.state_shape, activation="relu",data_format="channels_first")(X)
-        X = Conv2D(32, 5, strides=(2, 2), padding="valid", input_shape=self.state_shape, activation="relu",data_format="channels_first")(X)        
+        X = Conv2D(32, 5, strides=(2, 2), padding="valid", input_shape=self.state_shape, activation="relu",data_format="channels_first")(X)       
         X = Flatten()(X)
         
         # Input Layer of state size(4) and Hidden Layer with 128 nodes

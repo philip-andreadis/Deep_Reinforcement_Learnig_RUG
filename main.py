@@ -22,7 +22,7 @@ if __name__ == "__main__":
     print('\nState shape:', state_shape)
 
     # Parameters
-    num_episodes = 3000
+    num_episodes = 2500
     batch_size = 32
     render = True
     update_step = 4

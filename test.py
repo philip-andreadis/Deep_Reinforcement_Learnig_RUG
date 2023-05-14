@@ -11,7 +11,7 @@ num_actions = env.get_num_actions()
 state_shape = env.state_shape()
 
 # params
-path = 'models/Catch_DQN_CNN_simple_2000.h5'
+path = 'models/Catch_DQN_CNN_simple_2500.h5'
 episodes = 100
 
 # Define agent
@@ -47,3 +47,6 @@ for e in range(episodes):
             print("Reward:", reward)
             
 print('Average reward:',rewards/episodes)
+
+#save rewards in a file  using np.save
+np.save('rewards_test.npy', rewards)
